@@ -1,7 +1,7 @@
 // api/generate-interview.js (or whatever your API route is called)
 import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { db } from '../firebase/client.js';
+import { db } from '../firebase/admin.js';
 
 // Create Google AI instance with hardcoded API key
 const google = createGoogleGenerativeAI({
