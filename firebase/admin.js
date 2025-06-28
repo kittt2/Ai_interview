@@ -10,9 +10,9 @@ if (!process.env.Fproject_id || !process.env.Fclient_email || !process.env.Fpriv
 const app = getApps().length === 0
   ? initializeApp({
       credential: cert({
-        projectId: process.env.Fproject_id,
-        clientEmail: process.env.Fclient_email,
-        privateKey: process.env.Fprivate_key.replace(/\\n/g, '\n'),
+        projectId: process.env.VITE_Fproject_id,
+        clientEmail: process.env.VITE_Fclient_email,
+        privateKey: process.env.VITE_Fprivate_key.replace(/\\n/g, '\n'),
       }),
     })
   : getApp();
