@@ -7,7 +7,7 @@ import { getAuth } from 'firebase-admin/auth';
 if (!import.meta.env.VITE_Fproject_id || !import.meta.env.VITE_Fclient_email || !import.meta.env.VITE_Fprivate_key) {
   throw new Error("❌ Missing Firebase Admin environment variables.");
 }
-
+console.log(import.meta.env.VITE_Fproject_id,import.meta.env.VITE_Fclient_email ,import.meta.env.VITE_Fprivate_key)
 // Initialize Firebase Admin app
 const app = getApps().length === 0
   ? initializeApp({
