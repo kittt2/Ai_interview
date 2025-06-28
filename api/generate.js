@@ -11,8 +11,7 @@ export default async function handler(req, res) {
   try {
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001",{
-        apiKey: "AIzaSyCl7qLFk7RQRZudNY6WfygKZ3VjkKE__s8"
-,
+        apiKey: "AIzaSyCl7qLFk7RQRZudNY6WfygKZ3VjkKE__s8",
       }),
       prompt: `Prepare questions for a job interview.
 The job role is ${role}.
