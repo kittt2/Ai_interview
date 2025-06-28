@@ -3,7 +3,7 @@ import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
-if (!process.env.Fproject_id || !process.env.Fclient_email || !process.env.Fprivate_key) {
+if (!process.env.VITE_Fproject_id || !process.env.VITE_Fclient_email || !process.env.VITE_Fprivate_key) {
   throw new Error("❌ Missing Firebase Admin environment variables.");
 }
 
