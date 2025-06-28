@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
-import { db } from "../../firebase/client";
+import { db } from "../firebase/client";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
