@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   try {
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001",{
-        apiKey: import.meta.env.VITE_Googleaikey
+        apiKey: process.env.Googleaikey
 ,
       }),
       prompt: `Prepare questions for a job interview.
