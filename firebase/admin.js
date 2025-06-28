@@ -1,30 +1,17 @@
-// import { getApps } from 'firebase-admin/app';
-// import { getAnalytics } from 'firebase/analytics';
-// import { initializeApp } from 'firebase/app';
-// import {getAuth} from 'firebase/auth';
-// import {getFirestore} from 'firebase/firestore';
+// firebase/admin.js
+import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
-// const initFirebseAdmin = ()=>{
+const app = getApps().length === 0
+  ? initializeApp({
+      credential: cert({
+        projectId: process.env.Fproject_id,
+        clientEmail: process.env.Fclient_email,
+        privateKey: process.env.Fprivate_key?.replace(/\\n/g, '\n'),
+      }),
+    })
+  : getApp();
 
-//     const app = getApps();
-//     if(!app.length){
-//         initializeApp({
-//             credential : cert({
-//                 projectId:process.env.Fproject_id,
-//                 clientEmail:process.env.Fclient_email,
-//                 privateKey:process.env.Fprivate_key?.replace(/\\n/g,"\n"),
-  
-  
-  
-//             })
-//         })
-//     }
-
-//     return {
-//         auth:getAuth(),
-//         db: getFirestore()
-//     }
-
-// }
-
-// export const {auth, db} = initFirebseAdmin();
+export const db = getFirestore(app);
+export const auth = getAuth(app);
