@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
 // Ensure required environment variables are present
-if (!process.env.Fproject_id || !process.env.Fclient_email || !process.env.Fprivate_key) {
+if (!import.meta.env.VITE_Fproject_id || !import.meta.env.VITE_Fclient_email || !import.meta.env.VITE_Fprivate_key) {
   throw new Error("❌ Missing Firebase Admin environment variables.");
 }
 
