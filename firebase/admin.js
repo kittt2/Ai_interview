@@ -3,18 +3,28 @@ import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
-// Ensure required environment variables are present
-if (!import.meta.env.VITE_Fproject_id || !import.meta.env.VITE_Fclient_email || !import.meta.env.VITE_Fprivate_key) {
-  throw new Error("❌ Missing Firebase Admin environment variables.");
+// Validate environment variables (no VITE_ prefix for server-side)
+if (
+  !process.env.Fproject_id ||
+  !process.env.Fclient_email ||
+  !process.env.Fprivate_key
+) {
+  throw new Error('❌ Missing Firebase Admin environment variables.');
 }
-console.log(import.meta.env.VITE_Fproject_id,import.meta.env.VITE_Fclient_email ,import.meta.env.VITE_Fprivate_key)
+
+// Optional debug log (safe)
+console.log('✅ Firebase Admin initialized with:', {
+  projectId: process.env.Fproject_id,
+  clientEmail: process.env.Fclient_email,
+});
+
 // Initialize Firebase Admin app
 const app = getApps().length === 0
   ? initializeApp({
       credential: cert({
-        projectId: import.meta.env.VITE_Fproject_id,
-        clientEmail: import.meta.env.VITE_Fclient_email,
-        privateKey: import.meta.env.VITE_Fprivate_key.replace(/\\n/g, '\n'),
+        projectId: process.env.Fproject_id,
+        clientEmail: process.env.Fclient_email,
+        privateKey: process.env.Fprivate_key.replace(/\\n/g, '\n'),
       }),
     })
   : getApp();
