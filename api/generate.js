@@ -1,10 +1,13 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
-import { auth, db } from "../../firebase/client";
+import { db } from "../../firebase/client";
 
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-export async function handler(req, res) {
-  const { type, role, level, techstack, amount, userid } = await req.json();
+  const { type, role, level, techstack, amount, userid } = req.body;
 
   try {
     const { text: questions } = await generateText({
@@ -24,17 +27,21 @@ Thank you! <3
 `,
     });
 
-    const interview={
-      role,type,level,
-      techstack: techstack.split(','),
-      questions:JSON.parse(questions),
-      userid:userid,
-      finalized:true,
-      createdAt:new Date().toISOString()
-    }
+    const interview = {
+      role,
+      type,
+      level,
+      techstack: techstack.split(","),
+      questions: JSON.parse(questions),
+      userid,
+      finalized: true,
+      createdAt: new Date().toISOString(),
+    };
+
     await db.collection("interviews").add(interview);
-    return Response.json({success:true},{status:200})
+    res.status(200).json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error("Error generating interview:", error);
+    res.status(500).json({ success: false, error: error.message });
   }
 }
