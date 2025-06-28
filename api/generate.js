@@ -1,6 +1,7 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { db } from '../firebase/client.js'; 
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -9,9 +10,10 @@ export default async function handler(req, res) {
   const { type, role, level, techstack, amount, userid } = req.body;
 
   try {
+    // Make sure your env variable matches exactly
     const { text: questions } = await generateText({
-      model: google("gemini-2.0-flash-001",{
-        apiKey:process.env.Googleaikey,
+      model: google("gemini-2.0-flash-001", {
+        apiKey: process.env.GOOGLE_AI_KEY, // Changed from Googleaikey
       }),
       prompt: `Prepare questions for a job interview.
 The job role is ${role}.
