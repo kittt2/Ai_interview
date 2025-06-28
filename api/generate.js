@@ -1,6 +1,12 @@
+// api/generate-interview.js (or whatever your API route is called)
 import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
-import { db } from '../firebase/client.js'; 
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { db } from '../firebase/client.js';
+
+// Create Google AI instance with hardcoded API key
+const google = createGoogleGenerativeAI({
+  apiKey: "AIzaSyCl7qLFk7RQRZudNY6WfygKZ3VjkKE__s8"
+}); 
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,11 +16,9 @@ export default async function handler(req, res) {
   const { type, role, level, techstack, amount, userid } = req.body;
 
   try {
-    // Make sure your env variable matches exactly
+    // Use the custom Google AI instance
     const { text: questions } = await generateText({
-      model: google("gemini-2.0-flash-001", {
-        apiKey: process.env.GOOGLE_AI_KEY, // Changed from Googleaikey
-      }),
+      model: google("gemini-2.0-flash-001"), // No need for apiKey here anymore
       prompt: `Prepare questions for a job interview.
 The job role is ${role}.
 The job experience level is ${level}.
