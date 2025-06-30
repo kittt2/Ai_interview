@@ -16,9 +16,36 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm();
 
+  const callGenerateAPI = async (idToken) => {
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          role: "Frontend Developer",
+          techstack: "React, Firebase",
+          type: "technical",
+          amount: 5,
+        }),
+      });
+
+      const json = await res.json();
+      console.log("✅ API response:", json);
+    } catch (err) {
+      console.error("API error:", err.message);
+    }
+  };
+
   const onRegister = async (data) => {
     try {
-      const userCred = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
       const user = userCred.user;
 
       await setDoc(doc(db, "users", user.uid), {
@@ -27,6 +54,9 @@ export default function RegisterForm() {
         email: user.email,
         createdAt: new Date(),
       });
+
+      const token = await user.getIdToken();
+      await callGenerateAPI(token);
 
       navigate("/");
     } catch (error) {
@@ -46,6 +76,9 @@ export default function RegisterForm() {
         email: user.email,
         createdAt: new Date(),
       });
+
+      const token = await user.getIdToken();
+      await callGenerateAPI(token);
 
       navigate("/");
     } catch (error) {
