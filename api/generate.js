@@ -1,4 +1,3 @@
-import { getAuth } from "firebase-admin/auth"; // ✅ admin SDK
 import { db } from '../firebase/admin.js';
 import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
@@ -12,22 +11,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const { role, level, type, techstack, amount, userid } = req.body;
+
+  if (!userid) {
+    return res.status(400).json({ success: false, error: "Missing 'userid' field in request body." });
+  }
+
   try {
-    // ✅ Step 1: Verify Firebase token
-    const authHeader = req.headers.authorization || "";
-    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
-
-    if (!token) return res.status(401).json({ error: "Missing Firebase token" });
-
-    const decodedToken = await getAuth().verifyIdToken(token);
-    const uid = decodedToken.uid;
-
-    console.log("🔥 Authenticated Firebase UID:", uid);
-
-    // Step 2: Extract rest of the body
-    const { role, level, type, techstack, amount } = req.body;
-
-    // Step 3: Generate questions using Gemini
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
       prompt: `Prepare questions for a job interview.
@@ -39,10 +29,10 @@ The amount of questions required is: ${amount || 5}.
 Return like ["Question 1", "Question 2"] only.`
     });
 
-    let parsedQuestions = [];
+    let parsedQuestions;
     try {
       parsedQuestions = JSON.parse(questions);
-    } catch (err) {
+    } catch {
       parsedQuestions = questions.split('\n').filter(Boolean);
     }
 
@@ -52,25 +42,24 @@ Return like ["Question 1", "Question 2"] only.`
       type: type || "technical",
       techstack: techstack ? techstack.split(',').map(t => t.trim()) : [],
       questions: parsedQuestions,
-      userid: uid, // ✅ THIS is now 100% secure
+      userid: userid,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       finalized: true
     };
 
     const docRef = await db.collection("interviews").add(interview);
-    const savedDoc = await docRef.get();
+    const savedData = (await docRef.get()).data();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       interviewId: docRef.id,
       questions: parsedQuestions,
-      uid,
-      saved: savedDoc.data()
+      saved: savedData
     });
 
   } catch (error) {
     console.error("❌ API Error:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ success: false, error: error.message });
   }
 }

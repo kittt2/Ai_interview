@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import interview from "./pages/interview";
 import Interview from "./pages/interview";
+import InterviewDetail from "./pages/Interviewpage";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -21,6 +22,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/interview" element={<Interview/>} />
+            <Route path="/interview/:id" element={<InterviewDetail />} />
             <Route path="/register" element={<RegisterForm />} />
           </Route>
         </Routes>
