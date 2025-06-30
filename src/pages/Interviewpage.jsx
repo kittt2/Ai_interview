@@ -89,12 +89,12 @@ export default function InterviewDetail() {
 
           <div>
             <h2 className="text-xl font-semibold mb-2">Questions</h2>
-            {interview.questions && interview.questions.length > 0 ? (
+            {interview?.questions && interview?.questions.length > 0 ? (
               <ul className="space-y-3 list-disc list-inside text-slate-300">
-                {interview.questions.map((q, index) => (
+                {interview?.questions?.map((q, index) => (
                   <li key={index}>
-                    <p className="font-medium">{q.question}</p>
-                    {q.answer && <p className="text-sm mt-1 text-slate-400">AI Answer: {q.answer}</p>}
+                    <p className="font-medium">{q?.question}</p>
+                    {q && <p className="text-sm mt-1 text-slate-400">{q}</p>}
                   </li>
                 ))}
               </ul>
