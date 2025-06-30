@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Vapi from "@vapi-ai/web";
+import { Navigate } from "react-router-dom";
+import { interviewer } from "./interviewer";
 
 const CallStatus = {
   INACTIVE: "inactive",
@@ -9,7 +11,7 @@ const CallStatus = {
   ERROR: "error"
 };
 
-export default function Agent({ userid, username }) {
+export default function Agent({ userid, username ,type,interviewid,questions }) {
   const [callStatus, setCallStatus] = useState(CallStatus.INACTIVE);
   const [callMessage, setCallMessage] = useState("Ready to start call");
   const [vapi, setVapi] = useState(null);
@@ -80,7 +82,9 @@ export default function Agent({ userid, username }) {
       //     }
       // }
       // );
-      await vapi.start(
+
+      if(type==='generate'){
+        await vapi.start(
         undefined,
         undefined,
         undefined,
@@ -92,6 +96,23 @@ export default function Agent({ userid, username }) {
           },
         }
       );
+
+      }
+      else{
+        let formattedquestion='';
+        if(questions){
+        formattedquestion=questions.map((question)=>`- ${question}`).join('\n');
+        }
+            
+        await vapi.start(interviewer,{
+          variableValues:{
+            questions:formattedquestion,
+            
+          }
+        })
+
+      }
+     
 
     } catch (err) {
       console.error('Call failed:', err);
@@ -107,6 +128,19 @@ export default function Agent({ userid, username }) {
   const handleCallButtonClick = () => {
     callStatus === CallStatus.CONNECTED ? handleDisconnect() : handleCall();
   };
+
+  // useEffect(()=>{
+    
+  //   if(callStatus===finished){
+  //     if(type==='generate'){
+  //       Navigate("/")
+  //     }
+  //     else{
+        
+  //     }
+  //   } 
+      
+  // },[callStatus,type,userid])
 
   return (
     <div className="p-4 text-white">

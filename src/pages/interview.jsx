@@ -126,6 +126,7 @@ export default function Interview() {
                   <Agent 
                     userid={user.id}
                     username={user.name}
+                    type="generate"
                   />
                   {/* Subtle overlay for better integration */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none"></div>
