@@ -4,25 +4,37 @@ import { feedbackSchema } from '../src/pages/interviewer.js';
 import { db } from '../firebase/admin.js';
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLEAI_KEY,
+  apiKey: process.env.Googleaikey,
 });
 
-export default async function handler(req, res) {
-  // Set CORS headers FIRST - before any other logic
+// Vercel's official CORS wrapper function
+const allowCors = fn => async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.setHeader('Access-Control-Allow-Credentials', 'false');
+  // Alternative for specific origins:
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-  // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  // Only allow POST requests
+  return await fn(req, res);
+};
+
+// Your main handler function
+const handler = async (req, res) => {
+  // Only allow POST requests for the main functionality
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ 
+      error: 'Method not allowed',
+      allowedMethods: ['POST', 'OPTIONS']
+    });
   }
 
   try {
@@ -118,4 +130,8 @@ export default async function handler(req, res) {
       timestamp: new Date().toISOString()
     });
   }
-}
+};
+
+// Export the handler wrapped with CORS - THIS IS THE MAIN EXPORT
+// This replaces your original "export default async function handler(req, res)"
+export default allowCors(handler);
