@@ -1,6 +1,6 @@
 import { generateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google'; // ✅ Correct import
-import { feedbackSchema } from '../../src/pages/interviewer.js'; // ✅ Adjust path if needed
+import { feedbackSchema } from '../src/pages/interviewer.js'; // ✅ Adjust path if needed
 import { db } from '../../firebase/admin.js'; // ✅ Adjust path if needed
 
 const google = createGoogleGenerativeAI({
