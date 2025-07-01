@@ -4,8 +4,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "../../firebase/client";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { Briefcase, Sparkles, Plus } from "lucide-react";
+import { Briefcase, Sparkles, Plus,Award,Brain,Target,Shield,Zap,TrendingUp } from "lucide-react";
 import InterviewCard from "../pages/Interviewcard";
+import Homepage from "./Hero";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -79,40 +80,11 @@ export default function Home() {
     );
   }
 
-  if (!user) {
-    return (
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Sparkles className="w-8 h-8 text-blue-400" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-300 via-purple-300 to-emerald-300 bg-clip-text text-transparent">
-              IntelliHire
-            </h1>
-          </div>
-          <p className="text-xl mb-8 text-slate-300">
-            Your AI-powered interview assistant. Practice, prepare, and perfect your skills with{" "}
-            <span className="text-blue-300 font-semibold">smart feedback</span> and{" "}
-            <span className="text-purple-300 font-semibold">real-time simulations</span>.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link to="/login">
-              <Button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
-                Login
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="outline" className="px-8 py-3 border-2 border-slate-600 text-slate-200 rounded-xl">
-                Get Started
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
+ 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+      
+      <Homepage/>
       <div className="max-w-7xl mx-auto p-6">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
@@ -209,9 +181,106 @@ export default function Home() {
                 </div>
               )}
             </section>
+
+            <section className="py-20 px-6 relative">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text text-transparent">
+              Why Choose IntelliHire?
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Our AI-powered platform provides everything you need to ace your interviews
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-violet-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-violet-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-500/30 transition-colors duration-300">
+                <Brain className="w-6 h-6 text-violet-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-violet-300 transition-colors duration-300">
+                AI-Powered Analysis
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Get instant feedback on your answers, body language, and speech patterns with our advanced AI technology.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-500/30 transition-colors duration-300">
+                <Target className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-purple-300 transition-colors duration-300">
+                Personalized Practice
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Practice with questions tailored to your industry, role, and experience level for maximum relevance.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-indigo-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-indigo-500/30 transition-colors duration-300">
+                <Shield className="w-6 h-6 text-indigo-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-indigo-300 transition-colors duration-300">
+                Secure & Private
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Your practice sessions and data are completely secure with enterprise-grade encryption.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-cyan-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-500/30 transition-colors duration-300">
+                <Zap className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-cyan-300 transition-colors duration-300">
+                Real-time Feedback
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Receive instant suggestions and improvements during your practice sessions.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-500/30 transition-colors duration-300">
+                <TrendingUp className="w-6 h-6 text-emerald-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-emerald-300 transition-colors duration-300">
+                Progress Tracking
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Monitor your improvement with detailed analytics and performance metrics.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="group p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-pink-500/50 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-500/30 transition-colors duration-300">
+                <Award className="w-6 h-6 text-pink-400" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3 text-gray-100 group-hover:text-pink-300 transition-colors duration-300">
+                Expert-Crafted Content
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Learn from questions and scenarios created by industry professionals and HR experts.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
           </div>
         )}
       </div>
+      
+      
     </div>
+    
+
   );
 }
