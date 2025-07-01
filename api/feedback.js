@@ -8,14 +8,7 @@ const google = createGoogleGenerativeAI({
 });
 
 export default async function handler(req, res) {
-res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
-// res.setHeader('Access-Control-Allow-Origin', 'https://yourdomain.com');
- res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+
 
   try {
     const { interviewId, userId, transcript, feedbackId } = req.body;
