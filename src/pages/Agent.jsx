@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Vapi from "@vapi-ai/web";
 import { interviewer } from "./interviewer";
 import { Phone, PhoneOff, AlertTriangle } from "lucide-react";
@@ -15,6 +16,7 @@ const CallStatus = {
 const API_BASE = "https://ai-interview-brown-xi.vercel.app";
 
 export default function Agent({ userid, username, type, interviewid, questions, onCallStatusChange, feedbackId }) {
+  const navigate = useNavigate();
   const [callStatus, setCallStatus] = useState(CallStatus.INACTIVE);
   const [callMessage, setCallMessage] = useState("Ready to start call");
   const [vapi, setVapi] = useState(null);
@@ -23,7 +25,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
   const [lastMessage, setLastMessage] = useState("");
   const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
   const [feedbackGenerated, setFeedbackGenerated] = useState(false);
-  const [feedbackReady, setFeedbackReady] = useState(false); // ✅ new state
+  const [feedbackReady, setFeedbackReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const feedbackGeneratedRef = useRef(false);
@@ -82,51 +84,103 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     }
   }, [messages]);
 
+  // Feedback generation effect - only when type is NOT "generate"
   useEffect(() => {
-    const shouldGenerateFeedback =
-      callStatus === CallStatus.DISCONNECTED &&
-      messages.length > 0 &&
-      type === "generate" &&
-      feedbackId &&
+    // Skip feedback generation when type is "generate"
+    if (type === "generate") return;
+    
+    // Only trigger when call has ended and we have messages
+    if (callStatus !== CallStatus.DISCONNECTED || messages.length === 0) return;
+    
+    // Check if we should generate feedback
+    const shouldGenerateFeedback = 
+      userid &&
+      interviewid &&
       !feedbackGeneratedRef.current;
 
     if (!shouldGenerateFeedback) return;
 
     const generateFeedback = async () => {
       try {
+        console.log('Starting feedback generation...');
+        console.log('Request data:', {
+          interviewId: interviewid,
+          userId: userid,
+          transcript: messages,
+          messagesCount: messages.length
+        });
+        
         setIsGeneratingFeedback(true);
         feedbackGeneratedRef.current = true;
 
+        const requestBody = {
+          interviewId: interviewid,
+          userId: userid,
+          transcript: messages,
+        };
+
+        console.log('Making request to:', `${API_BASE}/api/feedback`);
+        
         const response = await fetch(`${API_BASE}/api/feedback`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            interviewId: interviewid,
-            userId: userid,
-            transcript: messages,
-           
-          }),
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(requestBody),
+          mode: 'cors',
+          credentials: 'omit'
         });
 
-        const data = await response.json();
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
-        if (data.success && data.feedbackId) {
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('Feedback API response:', data);
+
+        if (data.success) {
           setFeedbackGenerated(true);
-          setFeedbackReady(true); // ✅ enable button
+          setFeedbackReady(true);
+          console.log('Feedback generated successfully');
         } else {
-          setErrorMessage("Failed to generate feedback. Please try again.");
-          feedbackGeneratedRef.current = false;
+          throw new Error(data.error || 'Failed to generate feedback');
         }
       } catch (error) {
-        setErrorMessage("Error generating feedback. Please try again.");
+        console.error('Error generating feedback:', error);
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+        
+        // More specific error messages
+        let errorMessage = "Error generating feedback. ";
+        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+          errorMessage += "Network connection failed. Please check your internet connection and try again.";
+        } else if (error.message.includes('HTTP error')) {
+          errorMessage += "Server error. Please try again later.";
+        } else {
+          errorMessage += "Please try again.";
+        }
+        
+        setErrorMessage(errorMessage);
         feedbackGeneratedRef.current = false;
       } finally {
         setIsGeneratingFeedback(false);
       }
     };
 
-    generateFeedback();
-  }, [callStatus, messages, type, feedbackId, userid, interviewid]);
+    // Add a small delay to ensure all messages are captured
+    const timeoutId = setTimeout(generateFeedback, 1000);
+    
+    return () => clearTimeout(timeoutId);
+  }, [callStatus, messages.length, type, userid, interviewid]);
 
   const handleCall = async () => {
     if (!vapi || !userid) {
@@ -137,6 +191,12 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     try {
       updateCallStatus(CallStatus.CONNECTING);
       setErrorMessage("");
+      
+      // Reset feedback state for new call
+      feedbackGeneratedRef.current = false;
+      setFeedbackGenerated(false);
+      setFeedbackReady(false);
+      setMessages([]);
 
       if (type === 'generate') {
         await vapi.start(undefined, undefined, undefined, "87020da9-5f71-4bef-8c6e-15c22f499c29", {
@@ -238,12 +298,9 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         </div>
       </div>
 
-      {/* ✅ Feedback button shown when ready */}
-      {feedbackReady && (
+      {feedbackReady && type !== "generate" && (
         <button
-          onClick={() => {
-            window.location.href = `/interview/${interviewid}/feedback`;
-          }}
+          onClick={() => navigate(`/interview/${interviewid}/feedback`)}
           className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors"
         >
           View Feedback
