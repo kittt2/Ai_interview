@@ -2,7 +2,7 @@
 import { generateObject } from 'ai';
 import { google } from '@ai-sdk/google';
 import { feedbackSchema } from '../src/pages/interviewer.js';
-import { db } from '../firebase/admin'; // Your Firebase config
+import { db } from '../firebase/admin.js'; // Your Firebase config
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
