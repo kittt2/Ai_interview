@@ -11,6 +11,7 @@ import { Layout } from "./pages/Layout";
 import interview from "./pages/interview";
 import Interview from "./pages/interview";
 import InterviewDetail from "./pages/Interviewpage";
+import Feedback from "./pages/Feedback";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -23,6 +24,8 @@ function App() {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/interview" element={<Interview/>} />
             <Route path="/interview/:id" element={<InterviewDetail />} />
+            <Route path="/interview/:id/feedback" element={<Feedback/>} />
+
             <Route path="/register" element={<RegisterForm />} />
           </Route>
         </Routes>

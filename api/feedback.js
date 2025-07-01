@@ -76,76 +76,36 @@ export default async function handler(req, res) {
   }
 }
 
-// pages/api/feedback/get-by-interview.js
-import { db } from '@/lib/firebase';
 
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
 
-  try {
-    const { interviewId, userId } = req.query;
 
-    if (!interviewId || !userId) {
-      return res.status(400).json({ error: 'Missing interviewId or userId' });
-    }
+// export default async function handler(req, res) {
+//   if (req.method !== 'GET') {
+//     return res.status(405).json({ error: 'Method not allowed' });
+//   }
 
-    const querySnapshot = await db
-      .collection("feedback")
-      .where("interviewId", "==", interviewId)
-      .where("userId", "==", userId)
-      .limit(1)
-      .get();
+//   try {
+//     const { id } = req.query;
 
-    if (querySnapshot.empty) {
-      return res.status(404).json({ error: 'Feedback not found' });
-    }
+//     if (!id) {
+//       return res.status(400).json({ error: 'Missing interview ID' });
+//     }
 
-    const feedbackDoc = querySnapshot.docs[0];
-    const feedback = { id: feedbackDoc.id, ...feedbackDoc.data() };
-
-    return res.status(200).json({ success: true, feedback });
-
-  } catch (error) {
-    console.error("Error getting feedback:", error);
-    return res.status(500).json({ 
-      success: false, 
-      error: error.message 
-    });
-  }
-}
-
-// pages/api/interview/[id].js
-import { db } from '@/lib/firebase';
-
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  try {
-    const { id } = req.query;
-
-    if (!id) {
-      return res.status(400).json({ error: 'Missing interview ID' });
-    }
-
-    const interview = await db.collection("interviews").doc(id).get();
+//     const interview = await db.collection("interviews").doc(id).get();
     
-    if (!interview.exists) {
-      return res.status(404).json({ error: 'Interview not found' });
-    }
+//     if (!interview.exists) {
+//       return res.status(404).json({ error: 'Interview not found' });
+//     }
 
-    const interviewData = { id: interview.id, ...interview.data() };
+//     const interviewData = { id: interview.id, ...interview.data() };
 
-    return res.status(200).json({ success: true, interview: interviewData });
+//     return res.status(200).json({ success: true, interview: interviewData });
 
-  } catch (error) {
-    console.error("Error getting interview:", error);
-    return res.status(500).json({ 
-      success: false, 
-      error: error.message 
-    });
-  }
-}
+//   } catch (error) {
+//     console.error("Error getting interview:", error);
+//     return res.status(500).json({ 
+//       success: false, 
+//       error: error.message 
+//     });
+//   }
+// }
