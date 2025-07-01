@@ -1,12 +1,10 @@
-// pages/api/feedback/create.js
 import { generateObject } from 'ai';
-import { google } from '@ai-sdk/google';
-import { feedbackSchema } from '../src/pages/interviewer.js';
-import { db } from '../firebase/admin.js'; // Your Firebase config
-
+import { createGoogleGenerativeAI } from '@ai-sdk/google'; // ✅ Correct import
+import { feedbackSchema } from '../../src/pages/interviewer.js'; // ✅ Adjust path if needed
+import { db } from '../../firebase/admin.js'; // ✅ Adjust path if needed
 
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.Googleaikey   // Use environment variable instead
+  apiKey: process.env.Googleaikey, // ✅ Use secure env variable
 });
 
 export default async function handler(req, res) {
@@ -42,13 +40,13 @@ export default async function handler(req, res) {
         - **Problem-Solving**: Ability to analyze problems and propose solutions.
         - **Cultural & Role Fit**: Alignment with company values and job role.
         - **Confidence & Clarity**: Confidence in responses, engagement, and clarity.
-        `,
-      system: "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
+      `,
+      system: "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories.",
     });
 
     const feedback = {
-      interviewId: interviewId,
-      userId: userId,
+      interviewId,
+      userId,
       totalScore: object.totalScore,
       categoryScores: object.categoryScores,
       strengths: object.strengths,
@@ -57,60 +55,23 @@ export default async function handler(req, res) {
       createdAt: new Date().toISOString(),
     };
 
-    let feedbackRef;
-    if (feedbackId) {
-      feedbackRef = db.collection("feedback").doc(feedbackId);
-    } else {
-      feedbackRef = db.collection("feedback").doc();
-    }
+    const feedbackRef = feedbackId
+      ? db.collection("feedback").doc(feedbackId)
+      : db.collection("feedback").doc();
 
     await feedbackRef.set(feedback);
 
-    return res.status(200).json({ 
-      success: true, 
+    return res.status(200).json({
+      success: true,
       feedbackId: feedbackRef.id,
-      feedback: feedback 
+      feedback,
     });
 
   } catch (error) {
     console.error("Error creating feedback:", error);
-    return res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    return res.status(500).json({
+      success: false,
+      error: error.message,
     });
   }
 }
-
-
-
-
-// export default async function handler(req, res) {
-//   if (req.method !== 'GET') {
-//     return res.status(405).json({ error: 'Method not allowed' });
-//   }
-
-//   try {
-//     const { id } = req.query;
-
-//     if (!id) {
-//       return res.status(400).json({ error: 'Missing interview ID' });
-//     }
-
-//     const interview = await db.collection("interviews").doc(id).get();
-    
-//     if (!interview.exists) {
-//       return res.status(404).json({ error: 'Interview not found' });
-//     }
-
-//     const interviewData = { id: interview.id, ...interview.data() };
-
-//     return res.status(200).json({ success: true, interview: interviewData });
-
-//   } catch (error) {
-//     console.error("Error getting interview:", error);
-//     return res.status(500).json({ 
-//       success: false, 
-//       error: error.message 
-//     });
-//   }
-// }
