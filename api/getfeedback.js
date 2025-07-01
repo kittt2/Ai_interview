@@ -1,4 +1,15 @@
 
+// pages/api/feedback/create.js
+import { generateObject } from 'ai';
+import { google } from '@ai-sdk/google';
+import { feedbackSchema } from '../src/pages/interviewer.js';
+import { db } from '../firebase/admin.js'; // Your Firebase config
+
+
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.Googleaikey   // Use environment variable instead
+});
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
