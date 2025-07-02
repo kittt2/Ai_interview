@@ -76,12 +76,28 @@ const handler = async (req, res) => {
         Interview Transcript:
         ${formattedTranscript}
         
+        Analyze the COMPLETE interaction above. Look for:
+        - How the candidate answers questions
+        - Their communication style and clarity
+        - Any technical knowledge they demonstrate
+        - Problem-solving approaches they mention
+        - Their enthusiasm and cultural alignment
+        - Confidence levels throughout the conversation
+
         Please score the candidate from 0 to 100 in the following areas. Do not add categories other than the ones provided:
         - **Communication Skills**: Clarity, articulation, structured responses.
         - **Technical Knowledge**: Understanding of key concepts for the role.
         - **Problem-Solving**: Ability to analyze problems and propose solutions.
         - **Cultural Fit**: Alignment with company values and job role.
         - **Confidence and Clarity**: Confidence in responses, engagement, and clarity.
+
+        IMPORTANT: 
+        - You must provide exactly these 5 categories in this exact order
+        - Base your scores on ACTUAL content from the transcript
+        - Vary your scores based on what was actually said
+        - If a candidate says different things, give different feedback
+        - Be specific about what the candidate said or didn't say
+        - Avoid generic responses - make it personalized to this specific conversation
         
         Provide specific examples from the transcript to support your scores and recommendations.
       `,
