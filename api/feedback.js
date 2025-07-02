@@ -80,8 +80,8 @@ const handler = async (req, res) => {
         - **Communication Skills**: Clarity, articulation, structured responses.
         - **Technical Knowledge**: Understanding of key concepts for the role.
         - **Problem-Solving**: Ability to analyze problems and propose solutions.
-        - **Cultural & Role Fit**: Alignment with company values and job role.
-        - **Confidence & Clarity**: Confidence in responses, engagement, and clarity.
+        - **Cultural Fit**: Alignment with company values and job role.
+        - **Confidence and Clarity**: Confidence in responses, engagement, and clarity.
         
         Provide specific examples from the transcript to support your scores and recommendations.
       `,

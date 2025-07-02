@@ -27,6 +27,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
   const [feedbackGenerated, setFeedbackGenerated] = useState(false);
   const [feedbackReady, setFeedbackReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isFetchingFeedback, setIsFetchingFeedback] = useState(false);
 
   const feedbackGeneratedRef = useRef(false);
 
@@ -222,8 +223,71 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     callStatus === CallStatus.CONNECTED ? handleDisconnect() : handleCall();
   };
 
+  // New function to handle viewing feedback
+  const handleViewFeedback = async () => {
+    if (!userid || !interviewid) {
+      setErrorMessage("Missing user or interview information");
+      return;
+    }
+
+    try {
+      setIsFetchingFeedback(true);
+      setErrorMessage("");
+
+      console.log('Fetching feedback for:', { userId: userid, interviewId: interviewid });
+
+      const response = await fetch(
+        `${API_BASE}/api/getfeedback?userId=${encodeURIComponent(userid)}&interviewId=${encodeURIComponent(interviewid)}`,
+        {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          },
+          mode: 'cors',
+          credentials: 'omit'
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Feedback fetched successfully:', data);
+
+      if (data.success && data.feedback) {
+        // Navigate to feedback page with the fetched feedback
+        navigate(`/interview/${interviewid}/feedback`, { 
+          state: { 
+            feedback: data.feedback,
+            interview: { role: "Interview" } // You might want to pass actual interview data
+          }
+        });
+      } else {
+        throw new Error('No feedback data received');
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+      
+      let errorMessage = "Error loading feedback. ";
+      if (error.message.includes('404') || error.message.includes('No feedback found')) {
+        errorMessage = "No feedback found for this interview. Please complete the interview first.";
+      } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        errorMessage += "Network connection failed. Please check your internet connection.";
+      } else {
+        errorMessage += "Please try again.";
+      }
+      
+      setErrorMessage(errorMessage);
+    } finally {
+      setIsFetchingFeedback(false);
+    }
+  };
+
   const getStatusText = () => {
     if (isGeneratingFeedback) return "Generating Feedback...";
+    if (isFetchingFeedback) return "Loading Feedback...";
     switch (callStatus) {
       case CallStatus.CONNECTING: return "Connecting...";
       case CallStatus.CONNECTED: return "Connected";
@@ -236,7 +300,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
   };
 
   const getStatusColor = () => {
-    if (isGeneratingFeedback) return "text-purple-400";
+    if (isGeneratingFeedback || isFetchingFeedback) return "text-purple-400";
     switch (callStatus) {
       case CallStatus.CONNECTING: return "text-yellow-400";
       case CallStatus.CONNECTED: return "text-green-400";
@@ -262,16 +326,16 @@ export default function Agent({ userid, username, type, interviewid, questions, 
           <div className="flex items-center gap-4">
             <button
               onClick={handleCallButtonClick}
-              disabled={!userid || callStatus === CallStatus.CONNECTING || isGeneratingFeedback}
+              disabled={!userid || callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback}
               className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ${
                 callStatus === CallStatus.CONNECTED
                   ? 'bg-red-500 hover:bg-red-600'
-                  : callStatus === CallStatus.CONNECTING || isGeneratingFeedback
+                  : callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback
                   ? 'bg-yellow-500 cursor-not-allowed'
                   : 'bg-green-500 hover:bg-green-600'
               } ${!userid ? 'bg-gray-500 cursor-not-allowed' : ''}`}
             >
-              {callStatus === CallStatus.CONNECTING || isGeneratingFeedback ? (
+              {callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : callStatus === CallStatus.CONNECTED ? (
                 <PhoneOff className="w-6 h-6 text-white" />
@@ -283,7 +347,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${
                 callStatus === CallStatus.CONNECTED ? 'bg-green-400 animate-pulse' :
-                callStatus === CallStatus.CONNECTING || isGeneratingFeedback ? 'bg-yellow-400 animate-pulse' :
+                callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback ? 'bg-yellow-400 animate-pulse' :
                 callStatus === CallStatus.ERROR ? 'bg-red-400' :
                 'bg-gray-400'
               }`} />
@@ -300,9 +364,13 @@ export default function Agent({ userid, username, type, interviewid, questions, 
 
       {feedbackReady && type !== "generate" && (
         <button
-          onClick={() => navigate(`/interview/${interviewid}/feedback`)}
-          className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors"
+          onClick={handleViewFeedback}
+          disabled={isFetchingFeedback}
+          className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg shadow-md transition-colors flex items-center gap-2"
         >
+          {isFetchingFeedback && (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          )}
           View Feedback
         </button>
       )}

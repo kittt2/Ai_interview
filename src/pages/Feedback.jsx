@@ -1,6 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
-const Feedback = ({ interview, feedback, onBackToDashboard, onRetakeInterview }) => {
+const Feedback = ({ interview: propInterview, feedback: propFeedback, onBackToDashboard, onRetakeInterview }) => {
+  const { id } = useParams(); // This is the interview ID
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const [interview, setInterview] = useState(propInterview || null);
+  const [feedback, setFeedback] = useState(propFeedback || null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // If props are provided, use them
+    if (propInterview && propFeedback) {
+      setInterview(propInterview);
+      setFeedback(propFeedback);
+      return;
+    }
+
+    // Check if data was passed via navigation state
+    if (location.state?.interview && location.state?.feedback) {
+      setInterview(location.state.interview);
+      setFeedback(location.state.feedback);
+      return;
+    }
+
+    // If no data available, fetch it
+    fetchData();
+  }, [id, location.state, propInterview, propFeedback]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Get userId from your auth context or localStorage
+      const userId = localStorage.getItem('userId') || 'current-user-id';
+      
+      // Fetch both interview and feedback data
+      const [interviewResponse, feedbackResponse] = await Promise.all([
+        fetch(`${API_BASE}/api/getinterview?interviewId=${encodeURIComponent(id)}`),
+        fetch(`${API_BASE}/api/getfeedback?userId=${encodeURIComponent(userId)}&interviewId=${encodeURIComponent(id)}`)
+      ]);
+
+      if (!interviewResponse.ok || !feedbackResponse.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const interviewData = await interviewResponse.json();
+      const feedbackData = await feedbackResponse.json();
+      
+      setInterview(interviewData);
+      setFeedback(feedbackData.feedback || feedbackData); // Handle different response structures
+      
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBackToDashboard = () => {
+    if (onBackToDashboard) {
+      onBackToDashboard();
+    } else {
+      navigate('/dashboard'); // Default navigation
+    }
+  };
+
+  const handleRetakeInterview = () => {
+    if (onRetakeInterview) {
+      onRetakeInterview();
+    } else {
+      navigate(`/interview/${id}`); // Default navigation
+    }
+  };
+
   const formatDate = (date) => {
     if (!date) return "N/A";
     return new Intl.DateTimeFormat('en-US', {
@@ -12,6 +89,33 @@ const Feedback = ({ interview, feedback, onBackToDashboard, onRetakeInterview })
       hour12: true
     }).format(new Date(date));
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-lg text-blue-400">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <div className="text-center">
+          <div className="text-lg text-red-400 mb-4">Error: {error}</div>
+          <button 
+            onClick={() => navigate(-1)}
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state
   if (!interview) {
@@ -148,14 +252,14 @@ const Feedback = ({ interview, feedback, onBackToDashboard, onRetakeInterview })
       {/* Action Buttons */}
       <div className="flex gap-4 pt-6">
         <button
-          onClick={onBackToDashboard}
+          onClick={handleBackToDashboard}
           className="flex-1 bg-gray-800 border-2 border-blue-500 text-blue-400 py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
           aria-label="Return to main dashboard"
         >
           Back to Dashboard
         </button>
         <button
-          onClick={onRetakeInterview}
+          onClick={handleRetakeInterview}
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
           aria-label="Start a new interview session"
         >
