@@ -144,6 +144,7 @@ Conclude the interview properly:
 Thank the candidate for their time.
 Inform them that the company will reach out soon with feedback.
 End the conversation on a polite and positive note.
+In the end tell them to disconnect the call from their side.
 
 
 - Be sure to be professional and polite.

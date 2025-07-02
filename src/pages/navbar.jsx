@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, User, Settings, Crown } from "lucide-react";
+import { Menu, X, LogOut, User, Crown } from "lucide-react";
 
 export default function Navbar() {
   const [userInitial, setUserInitial] = useState("");
@@ -67,7 +67,6 @@ export default function Navbar() {
     <nav className="bg-gray-950/95 backdrop-blur-lg border-b border-gray-800/50 sticky top-0 z-50 shadow-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div className="flex-shrink-0">
             <Link 
               to="/" 
@@ -83,7 +82,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             <NavLink
               to="/"
@@ -111,7 +109,6 @@ export default function Navbar() {
               Interview
             </NavLink>
 
-            {/* Conditional Auth Links */}
             {!isAuthenticated ? (
               <div className="flex items-center space-x-3 ml-6">
                 <NavLink
@@ -131,11 +128,11 @@ export default function Navbar() {
                 </Button>
               </div>
             ) : (
-              <div className="ml-6">
-                <DropdownMenu>
+              <div className="ml-6 cursor-pointer ">
+                <DropdownMenu className="cursor-pointer">
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-11 w-11 rounded-full bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 hover:border-violet-500/50 transition-all duration-300 group">
-                      <Avatar className="h-9 w-9">
+                    <Button variant="ghost" className="cursor-pointer relative h-11 w-11 rounded-full bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 hover:border-violet-500/50 transition-all duration-300 group ">
+                      <Avatar className="h-9 w-9 cursor-pointer">
                         <AvatarFallback className="bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold text-sm group-hover:from-violet-400 group-hover:to-purple-500 transition-all duration-300">
                           {userInitial}
                         </AvatarFallback>
@@ -144,9 +141,9 @@ export default function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-64 bg-gray-900/95 backdrop-blur-lg border border-gray-700/50 shadow-2xl shadow-black/50" align="end" forceMount>
-                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-violet-500/10 to-purple-500/10 rounded-t-lg">
-                      <Avatar className="h-10 w-10">
-                        <AvatarFallback className="bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold">
+                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-violet-500/10 to-purple-500/10 rounded-t-lg cursor-pointer">
+                      <Avatar className="h-10 w-10 cursor-pointer">
+                        <AvatarFallback className="bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold cursor-pointer">
                           {userInitial}
                         </AvatarFallback>
                       </Avatar>
@@ -179,7 +176,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -196,10 +192,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-800/50 animate-in slide-in-from-top-2 duration-300">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-900/50 backdrop-blur-sm rounded-b-2xl">
+          <div className="md:hidden absolute left-0 right-0 top-16 bg-gray-900/95 backdrop-blur-lg border-b border-gray-800/50 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-40">
+            <div className="px-4 py-6 space-y-1">
               <NavLink
                 to="/"
                 onClick={closeMenu}
@@ -215,7 +210,7 @@ export default function Navbar() {
               </NavLink>
               
               <NavLink
-                to="/interview"
+                to="/profile"
                 onClick={closeMenu}
                 className={({ isActive }) =>
                   `block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
@@ -225,10 +220,9 @@ export default function Navbar() {
                   }`
                 }
               >
-                Interview
+                Profile
               </NavLink>
 
-              {/* Mobile Auth Links */}
               {!isAuthenticated ? (
                 <div className="space-y-2 pt-4 border-t border-gray-800/50">
                   <NavLink

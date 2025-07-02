@@ -105,15 +105,15 @@ export default function Home() {
           <div className="space-y-12">
             {/* My Interviews */}
             <section>
-              <div className="flex justify-between items-center mb-8">
+              <div className="flex flex-col text-center sm:text-left sm:flex-row sm:justify-between items-center mb-8">
                 <div>
                   <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
                     My Interviews
                   </h2>
-                  <p className="text-slate-400">Manage and track your interview preparations</p>
+                  <p className="text-slate-400 pb-6 sm:pb-0">Manage and track your interview preparations</p>
                 </div>
                 <Link to="/interview">
-                  <Button  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
+                  <Button  className="cursor-pointer   sm:px-6 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
                     <Plus className="w-5 h-5 mr-2" />
                     Create New Interview
                   </Button>
@@ -121,7 +121,7 @@ export default function Home() {
               </div>
 
               {myInterviews.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-6">
                   {myInterviews.map((interview) => (
                     <InterviewCard
                       key={interview.id}
@@ -141,7 +141,7 @@ export default function Home() {
                     Create your first interview session and begin practicing with AI-powered feedback
                   </p>
                   <Link to="/interview">
-                    <Button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
+                    <Button className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
                       <Plus className="w-5 h-5 mr-2" />
                       Create Your First Interview
                     </Button>
@@ -150,7 +150,6 @@ export default function Home() {
               )}
             </section>
 
-            {/* All Interviews */}
             <section>
               <div className="mb-8">
                 <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-emerald-300 to-blue-300 bg-clip-text text-transparent">
@@ -160,7 +159,7 @@ export default function Home() {
               </div>
 
               {allInterviews.length > 0 ? (
-                <div  className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div  className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                   {allInterviews.map((interview) => (
                     <InterviewCard
                       key={interview.id}

@@ -107,29 +107,31 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="max-h-screen bg-black flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Card className="bg-zinc-900 border-zinc-800 shadow-2xl">
-          <CardHeader className=" text-center ">
-            <div className="mx-auto w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center">
-              <User className="w-6 h-6 text-white" />
+        <Card className="bg-gray-900/95 border-gray-800/50 shadow-2xl shadow-black/50 backdrop-blur-lg">
+          <CardHeader className="text-center pb-6">
+            <div className="mx-auto w-12 h-12 bg-gray-800/50 rounded-full flex items-center justify-center border border-gray-700/50">
+              <User className="w-6 h-6 text-violet-400" />
             </div>
-            <CardTitle className="text-2xl font-light text-white">Create Account</CardTitle>
-            <CardDescription className="text-zinc-400 text-sm">Join us today</CardDescription>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+              Create Account
+            </CardTitle>
+            <CardDescription className="text-gray-400 text-sm">Join us today</CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-4">
             {error && (
               <Alert className="bg-red-500/10 border-red-500/20 text-red-400">
                 <AlertDescription className="text-sm">{error}</AlertDescription>
               </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onRegister)} className="space-y-3">
-              <div className="space-y-1">
-                <Label htmlFor="fullName" className="text-zinc-300 text-sm">Full Name</Label>
+            <form onSubmit={handleSubmit(onRegister)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName" className="text-gray-300 text-sm font-medium">Full Name</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                   <Input
                     id="fullName"
                     {...register("fullName", { 
@@ -137,16 +139,16 @@ export default function RegisterForm() {
                       minLength: { value: 2, message: "Name must be at least 2 characters" }
                     })}
                     placeholder="Enter your full name"
-                    className="pl-10 h-10 bg-zinc-800/50 border-zinc-800 text-white placeholder:text-zinc-500 focus:border-white focus:ring-1 focus:ring-white"
+                    className="pl-10 h-11 bg-gray-800/50 border-gray-700/50 text-white placeholder:text-gray-500 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all duration-300"
                   />
                 </div>
                 {errors.fullName && <p className="text-xs text-red-400">{errors.fullName.message}</p>}
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="email" className="text-zinc-300 text-sm">Email Address</Label>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-gray-300 text-sm font-medium">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                   <Input
                     id="email"
                     {...register("email", { 
@@ -155,16 +157,16 @@ export default function RegisterForm() {
                     })}
                     type="email"
                     placeholder="Enter your email"
-                    className="pl-10 h-10 bg-zinc-800/50 border-zinc-800 text-white placeholder:text-zinc-500 focus:border-white focus:ring-1 focus:ring-white"
+                    className="pl-10 h-11 bg-gray-800/50 border-gray-700/50 text-white placeholder:text-gray-500 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all duration-300"
                   />
                 </div>
                 {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="password" className="text-zinc-300 text-sm">Password</Label>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-gray-300 text-sm font-medium">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                   <Input
                     id="password"
                     {...register("password", { 
@@ -174,12 +176,12 @@ export default function RegisterForm() {
                     })}
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a strong password"
-                    className="pl-10 pr-10 h-10 bg-zinc-800/50 border-zinc-800 text-white placeholder:text-zinc-500 focus:border-white focus:ring-1 focus:ring-white"
+                    className="pl-10 pr-10 h-11 bg-gray-800/50 border-gray-700/50 text-white placeholder:text-gray-500 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all duration-300"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-zinc-500 hover:text-white"
+                    className="absolute right-3 top-3 text-gray-500 hover:text-violet-400 transition-colors duration-200"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -187,7 +189,7 @@ export default function RegisterForm() {
                 {errors.password && <p className="text-xs text-red-400">{errors.password.message}</p>}
                 {password && password.length > 0 && (
                   <div className="text-xs flex items-center gap-2">
-                    <span className="text-zinc-400">Strength:</span>
+                    <span className="text-gray-400">Strength:</span>
                     {password.length >= 8 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password) ? (
                       <span className="text-green-400">Strong</span>
                     ) : password.length >= 6 ? (
@@ -199,10 +201,10 @@ export default function RegisterForm() {
                 )}
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="confirmPassword" className="text-zinc-300 text-sm">Confirm Password</Label>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-gray-300 text-sm font-medium">Confirm Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                   <Input
                     id="confirmPassword"
                     {...register("confirmPassword", { 
@@ -211,7 +213,7 @@ export default function RegisterForm() {
                     })}
                     type={showPassword ? "text" : "password"}
                     placeholder="Confirm your password"
-                    className="pl-10 h-10 bg-zinc-800/50 border-zinc-800 text-white placeholder:text-zinc-500 focus:border-white focus:ring-1 focus:ring-white"
+                    className="pl-10 h-11 bg-gray-800/50 border-gray-700/50 text-white placeholder:text-gray-500 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all duration-300"
                   />
                 </div>
                 {errors.confirmPassword && <p className="text-xs text-red-400">{errors.confirmPassword.message}</p>}
@@ -219,7 +221,7 @@ export default function RegisterForm() {
 
               <Button 
                 type="submit" 
-                className="w-full h-10 bg-white text-black hover:bg-zinc-200 font-medium"
+                className="w-full h-11 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 transform hover:scale-105"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -233,12 +235,12 @@ export default function RegisterForm() {
               </Button>
             </form>
 
-            <div className="relative">
+            <div className="relative py-2">
               <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full bg-zinc-800" />
+                <Separator className="w-full bg-gray-800/50" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-zinc-900 px-3 text-zinc-500">OR</span>
+                <span className="bg-gray-900/95 px-3 text-gray-500">OR</span>
               </div>
             </div>
 
@@ -247,7 +249,7 @@ export default function RegisterForm() {
               variant="outline"
               onClick={onGoogleRegister}
               disabled={googleLoading}
-              className="w-full h-10 bg-zinc-800/50 border-zinc-800 text-white hover:bg-zinc-800"
+              className="w-full h-11 bg-gray-800/50 border-gray-700/50 text-white hover:bg-gray-700/50 hover:border-violet-500/50 rounded-xl transition-all duration-300"
             >
               {googleLoading ? (
                 <>
@@ -262,22 +264,22 @@ export default function RegisterForm() {
               )}
             </Button>
 
-            <div className="text-center text-sm text-zinc-500">
+            <div className="text-center text-sm text-gray-500 pt-2">
               Already have an account?{" "}
-              <Link to="/login" className="text-white hover:text-zinc-300 underline">
+              <Link to="/login" className="text-violet-400 hover:text-violet-300 underline transition-colors duration-200">
                 Sign in
               </Link>
             </div>
           </CardContent>
         </Card>
 
-        <div className="mt-6 text-center text-xs text-zinc-600">
+        <div className="mt-6 text-center text-xs text-gray-600">
           By creating an account, you agree to our{" "}
-          <Link to="/terms" className="text-zinc-500 hover:text-zinc-400 underline">
+          <Link to="/" className="text-gray-500 hover:text-gray-400 underline transition-colors duration-200">
             Terms of Service
           </Link>{" "}
           and{" "}
-          <Link to="/privacy" className="text-zinc-500 hover:text-zinc-400 underline">
+          <Link to="/" className="text-gray-500 hover:text-gray-400 underline transition-colors duration-200">
             Privacy Policy
           </Link>
         </div>

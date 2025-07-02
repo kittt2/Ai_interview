@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner"; // ✅ Simple direct import
+import { toast } from "sonner";
 
 import { 
   User, 
@@ -56,7 +56,6 @@ export default function ProfilePage() {
         setUser(firebaseUser);
         
         try {
-          // Fetch user document from Firestore
           const docRef = doc(db, "users", firebaseUser.uid);
           const docSnap = await getDoc(docRef);
           
@@ -69,17 +68,12 @@ export default function ProfilePage() {
               
             });
           } else {
-            // Create initial user document if it doesn't exist
             const initialData = {
               fullName: firebaseUser.displayName || "",
               email: firebaseUser.email,
               createdAt: new Date().toISOString(),
               phone: "",
-              company: "",
-              position: "",
-              bio: "",
-              location: "",
-              website: ""
+              
             };
             await updateDoc(docRef, initialData);
             setUserDoc(initialData);
@@ -87,11 +81,7 @@ export default function ProfilePage() {
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
-          toast({
-            title: "Error",
-            description: "Failed to load profile data",
-            variant: "destructive"
-          });
+          toast.error("Failed to load profile data");
         }
       } else {
         navigate("/login");
@@ -100,7 +90,7 @@ export default function ProfilePage() {
     });
 
     return () => unsubscribe();
-  }, [navigate, toast]);
+  }, [navigate]);
 
   const handleSave = async () => {
     if (!user) return;
@@ -116,17 +106,10 @@ export default function ProfilePage() {
       setUserDoc(prev => ({ ...prev, ...editedData }));
       setIsEditing(false);
       
-      toast({
-        title: "Success",
-        description: "Profile updated successfully"
-      });
+      toast.success("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update profile",
-        variant: "destructive"
-      });
+      toast.error("Failed to update profile");
     } finally {
       setSaving(false);
     }
@@ -138,11 +121,7 @@ export default function ProfilePage() {
     setEditedData({
       fullName: userDoc.fullName || "",
       phone: userDoc.phone || "",
-      company: userDoc.company || "",
-      position: userDoc.position || "",
-      bio: userDoc.bio || "",
-      location: userDoc.location || "",
-      website: userDoc.website || ""
+     
     });
     setIsEditing(false);
   };
@@ -151,20 +130,12 @@ export default function ProfilePage() {
     if (!user) return;
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "New passwords don't match",
-        variant: "destructive"
-      });
+      toast.error("New passwords don't match");
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      toast({
-        title: "Error",
-        description: "Password must be at least 6 characters long",
-        variant: "destructive"
-      });
+      toast.error("Password must be at least 6 characters long");
       return;
     }
 
@@ -178,17 +149,10 @@ export default function ProfilePage() {
         confirmPassword: ""
       });
       
-      toast({
-        title: "Success",
-        description: "Password updated successfully"
-      });
+      toast.success("Password updated successfully");
     } catch (error) {
       console.error("Error updating password:", error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update password",
-        variant: "destructive"
-      });
+      toast.error(error.message || "Failed to update password");
     } finally {
       setIsChangingPassword(false);
     }
@@ -200,17 +164,10 @@ export default function ProfilePage() {
     setSendingVerification(true);
     try {
       await sendEmailVerification(user);
-      toast({
-        title: "Success",
-        description: "Verification email sent! Check your inbox."
-      });
+      toast.success("Verification email sent! Check your inbox.");
     } catch (error) {
       console.error("Error sending verification:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send verification email",
-        variant: "destructive"
-      });
+      toast.error("Failed to send verification email");
     } finally {
       setSendingVerification(false);
     }
@@ -237,14 +194,12 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-[20%] right-[15%] w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
         <div className="mb-8">
           <Card className="bg-gray-900/50 backdrop-blur-lg border-gray-800/50 shadow-2xl">
             <CardContent className="p-6 sm:p-8">
@@ -301,7 +256,6 @@ export default function ProfilePage() {
           </Card>
         </div>
 
-        {/* Main Content Tabs */}
         <Tabs defaultValue="profile" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 bg-gray-900/50 border border-gray-800/50">
             <TabsTrigger 
@@ -327,7 +281,6 @@ export default function ProfilePage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Profile Tab */}
           <TabsContent value="profile">
             <Card className="bg-gray-900/50 backdrop-blur-lg border-gray-800/50">
               <CardHeader>
@@ -400,7 +353,6 @@ export default function ProfilePage() {
             </Card>
           </TabsContent>
 
-          {/* Security Tab */}
           <TabsContent value="security">
             <div className="space-y-6">
               <Card className="bg-gray-900/50 backdrop-blur-lg border-gray-800/50">
@@ -470,7 +422,6 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
 
-              {/* Password Change Card */}
               <Card className="bg-gray-900/50 backdrop-blur-lg border-gray-800/50">
                 <CardHeader>
                   <CardTitle className="text-gray-100">Change Password</CardTitle>
@@ -547,7 +498,6 @@ export default function ProfilePage() {
             </div>
           </TabsContent>
 
-          {/* Premium Tab */}
           <TabsContent value="premium">
             <Card className="bg-gray-900/50 backdrop-blur-lg border-gray-800/50">
               <CardHeader>

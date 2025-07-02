@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/client";
+import { auth, db } from "../../firebase/client";
+import { onAuthStateChanged } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Crown, User, Bot, Code, Hash, FileText } from "lucide-react";
@@ -11,37 +12,42 @@ export default function InterviewDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [interview, setInterview] = useState(null);
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [callStatus, setCallStatus] = useState("inactive");
   const [isAISpeaking, setIsAISpeaking] = useState(false);
 
   useEffect(() => {
-    const fetchInterviewAndUser = async () => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setAuthUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const fetchInterviewAndCurrentUser = async () => {
       try {
-        // Fetch interview document
         const interviewDocRef = doc(db, "interviews", id);
         const interviewDocSnap = await getDoc(interviewDocRef);
 
         if (interviewDocSnap.exists()) {
           const interviewData = { id: interviewDocSnap.id, ...interviewDocSnap.data() };
           setInterview(interviewData);
-
-          // Fetch user document using userid from interview
-          if (interviewData.userid) {
-            const userDocRef = doc(db, "users", interviewData.userid);
-            const userDocSnap = await getDoc(userDocRef);
-
-            if (userDocSnap.exists()) {
-              setUser({ id: userDocSnap.id, ...userDocSnap.data() });
-            } else {
-              console.log("User document not found!");
-              // Fallback: create a basic user object with just the ID
-              // setUser({ id: interviewData.userid, name: userData.fullName || firebaseUser.displayName || "User" });
-            }
-          }
         } else {
           console.log("Interview document not found!");
+        }
+
+        if (authUser) {
+          const userDocRef = doc(db, "users", authUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            setCurrentUser({ id: userDocSnap.id, ...userDocSnap.data() });
+          } else {
+            console.log("Current user document not found!");
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,10 +56,9 @@ export default function InterviewDetail() {
       }
     };
 
-    fetchInterviewAndUser();
-  }, [id]);
+    fetchInterviewAndCurrentUser();
+  }, [id, authUser]);
 
-  // AI speaking animation only when call is connected
   useEffect(() => {
     let interval;
     
@@ -70,7 +75,6 @@ export default function InterviewDetail() {
     };
   }, [callStatus]);
 
-  // Handle call status changes from Agent component
   const handleCallStatusChange = (status) => {
     setCallStatus(status);
   };
@@ -107,13 +111,11 @@ export default function InterviewDetail() {
     );
   }
 
-  const username = user?.fullName || user?.displayName || "Unknown User";
+  const username = currentUser?.fullName || authUser?.displayName || "Unknown User";
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-3">
@@ -133,7 +135,7 @@ export default function InterviewDetail() {
             <Button 
               onClick={() => navigate(-1)} 
               variant="outline"
-              className="bg-gray-800/50 border-gray-700/50 text-gray-300 hover:bg-gray-700/50 hover:text-white backdrop-blur-lg"
+              className="cursor-pointer bg-gray-800/50 border-gray-700/50 text-gray-300 hover:bg-gray-700/50 hover:text-white backdrop-blur-lg"
             >
               <ArrowLeft className="mr-2 w-4 h-4" />
               Back
@@ -180,9 +182,7 @@ export default function InterviewDetail() {
           </div>
         </div>
 
-        {/* Video Grid Container - Same as Interview component */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
-          {/* AI Agent Video */}
           <div className="relative bg-gray-900/50 backdrop-blur-lg border border-gray-800/50 rounded-2xl overflow-hidden shadow-2xl shadow-black/20 min-h-[320px] lg:min-h-[400px]">
             <div className="absolute inset-0 flex items-center justify-center p-6">
               <div className="text-center">
@@ -193,7 +193,6 @@ export default function InterviewDetail() {
                 }`}>
                   <div className="text-white text-xl sm:text-2xl lg:text-3xl font-bold">AI</div>
                   
-                  {/* Speaking animation rings */}
                   {isAISpeaking && (
                     <>
                       <div className="absolute inset-0 rounded-full border-2 border-violet-400/50 animate-ping"></div>
@@ -217,7 +216,6 @@ export default function InterviewDetail() {
               </div>
             </div>
             
-            {/* Agent Name Badge */}
             <div className="absolute bottom-4 left-4 z-10">
               <div className={`bg-gray-900/80 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-3 border transition-all duration-300 ${
                 isAISpeaking 
@@ -241,7 +239,6 @@ export default function InterviewDetail() {
             </div>
           </div>
 
-          {/* Candidate Video */}
           <div className="relative bg-gray-900/50 backdrop-blur-lg border border-gray-800/50 rounded-2xl overflow-hidden shadow-2xl shadow-black/20 min-h-[320px] lg:min-h-[400px]">
             <div className="absolute inset-0 flex items-center justify-center p-6">
               <div className="text-center">
@@ -257,7 +254,6 @@ export default function InterviewDetail() {
               </div>
             </div>
             
-            {/* Candidate Name Badge */}
             <div className="absolute bottom-4 left-4 z-10">
               <div className="bg-gray-900/80 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-3 border border-gray-700/50">
                 <div className="w-3 h-3 bg-green-500 rounded-full flex items-center justify-center">
@@ -269,11 +265,10 @@ export default function InterviewDetail() {
           </div>
         </div>
 
-        {/* Call Controls Section */}
         <div className=" flex justify-center items-center">
           <Agent 
             username={username} 
-            userid={user?.id || interview.userid}
+            userid={authUser?.uid || currentUser?.id}
             interviewid={id}
             questions={interview.questions}
             onCallStatusChange={handleCallStatusChange}

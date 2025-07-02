@@ -37,7 +37,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
   };
 
   useEffect(() => {
-    const vapiInstance = new Vapi("3784590e-e709-46e4-a2db-1b3eb1dea5cc");
+    const vapiInstance = new Vapi(import.meta.env.VITE_vapipublickey);
     setVapi(vapiInstance);
 
     const onCallStart = () => {
@@ -66,7 +66,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     vapiInstance.on('error', (error) => {
       console.error('VAPI Error:', error);
       updateCallStatus(CallStatus.ERROR);
-      setErrorMessage("Call failed. Please check your connection and try again.");
     });
 
     return () => {
@@ -85,15 +84,11 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     }
   }, [messages]);
 
-  // Feedback generation effect - only when type is NOT "generate"
   useEffect(() => {
-    // Skip feedback generation when type is "generate"
     if (type === "generate") return;
     
-    // Only trigger when call has ended and we have messages
     if (callStatus !== CallStatus.DISCONNECTED || messages.length === 0) return;
     
-    // Check if we should generate feedback
     const shouldGenerateFeedback = 
       userid &&
       interviewid &&
@@ -104,12 +99,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     const generateFeedback = async () => {
       try {
         console.log('Starting feedback generation...');
-        console.log('Request data:', {
-          interviewId: interviewid,
-          userId: userid,
-          transcript: messages,
-          messagesCount: messages.length
-        });
         
         setIsGeneratingFeedback(true);
         feedbackGeneratedRef.current = true;
@@ -117,7 +106,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         const requestBody = {
           interviewId: interviewid,
           userId: userid,
-          transcript: messages,
+          transcript: messages
         };
 
         console.log('Making request to:', `${API_BASE}/api/feedback`);
@@ -134,12 +123,11 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         });
 
         console.log('Response status:', response.status);
-        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Error response:', errorText);
-          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
@@ -154,13 +142,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         }
       } catch (error) {
         console.error('Error generating feedback:', error);
-        console.error('Error details:', {
-          name: error.name,
-          message: error.message,
-          stack: error.stack
-        });
         
-        // More specific error messages
         let errorMessage = "Error generating feedback. ";
         if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
           errorMessage += "Network connection failed. Please check your internet connection and try again.";
@@ -177,7 +159,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
       }
     };
 
-    // Add a small delay to ensure all messages are captured
     const timeoutId = setTimeout(generateFeedback, 1000);
     
     return () => clearTimeout(timeoutId);
@@ -193,14 +174,13 @@ export default function Agent({ userid, username, type, interviewid, questions, 
       updateCallStatus(CallStatus.CONNECTING);
       setErrorMessage("");
       
-      // Reset feedback state for new call
       feedbackGeneratedRef.current = false;
       setFeedbackGenerated(false);
       setFeedbackReady(false);
       setMessages([]);
 
       if (type === 'generate') {
-        await vapi.start(undefined, undefined, undefined, "87020da9-5f71-4bef-8c6e-15c22f499c29", {
+        await vapi.start(undefined, undefined, undefined, import.meta.env.VITE_vapiworkflowid, {
           variableValues: { username, userid },
         });
       } else {
@@ -223,7 +203,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
     callStatus === CallStatus.CONNECTED ? handleDisconnect() : handleCall();
   };
 
-  // New function to handle viewing feedback
   const handleViewFeedback = async () => {
     if (!userid || !interviewid) {
       setErrorMessage("Missing user or interview information");
@@ -257,11 +236,10 @@ export default function Agent({ userid, username, type, interviewid, questions, 
       console.log('Feedback fetched successfully:', data);
 
       if (data.success && data.feedback) {
-        // Navigate to feedback page with the fetched feedback
         navigate(`/interview/${interviewid}/feedback`, { 
           state: { 
             feedback: data.feedback,
-            interview: { role: "Interview" } // You might want to pass actual interview data
+            interview: { role: "Interview" }
           }
         });
       } else {
@@ -366,7 +344,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         <button
           onClick={handleViewFeedback}
           disabled={isFetchingFeedback}
-          className="cursor-pointer mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg shadow-md transition-colors flex items-center gap-2"
+          className="cursor-pointer mt-4 px-6 py-2 bg-violet-800 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-3xl shadow-md transition-colors flex items-center gap-2"
         >
           {isFetchingFeedback && (
             <div className="cursor-pointer w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
