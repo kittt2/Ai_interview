@@ -24,7 +24,7 @@ export default function Footer() {
             <Link to="/" className="inline-flex items-center space-x-2 mb-4">
               <Crown className="h-8 w-8 text-violet-400" />
               <span className="text-2xl font-bold text-white">
-                MyApp
+                MockAI
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-md mx-auto">
@@ -48,7 +48,7 @@ export default function Footer() {
             <div className="flex justify-center space-x-6 text-sm">
               <a href="mailto:hello@myapp.com" className="flex items-center space-x-2 text-gray-400 hover:text-violet-400">
                 <Mail className="h-4 w-4" />
-                <span>hello@myapp.com</span>
+                <span>nitinsainiformal@gmail.com</span>
               </a>
               <a href="tel:+1234567890" className="flex items-center space-x-2 text-gray-400 hover:text-violet-400">
                 <Phone className="h-4 w-4" />
@@ -61,16 +61,16 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-gray-800 py-6 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 text-gray-400 text-sm mb-4 md:mb-0">
-            <span>© {currentYear} MyApp. Made with</span>
+            <span>© {currentYear} MockAI. Made with</span>
             <Heart className="h-4 w-4 text-red-400 fill-current" />
             <span>by our team.</span>
           </div>
           
           <div className="flex space-x-4 text-sm">
-            <Link to="/privacy" className="text-gray-400 hover:text-violet-400">
+            <Link to="/" className="text-gray-400 hover:text-violet-400">
               Privacy
             </Link>
-            <Link to="/terms" className="text-gray-400 hover:text-violet-400">
+            <Link to="/" className="text-gray-400 hover:text-violet-400">
               Terms
             </Link>
           </div>

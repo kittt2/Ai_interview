@@ -78,7 +78,7 @@ export default function Navbar() {
                 <div className="absolute inset-0 bg-violet-400/20 blur-xl rounded-full group-hover:bg-violet-300/30 transition-all duration-300"></div>
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:via-purple-300 group-hover:to-indigo-300 transition-all duration-300">
-                MyApp
+                MockAI
               </span>
             </Link>
           </div>
@@ -158,14 +158,13 @@ export default function Navbar() {
                       </div>
                     </div>
                     <DropdownMenuSeparator className="bg-gray-700/50" />
-                    <DropdownMenuItem className="cursor-pointer text-gray-300 hover:text-gray-100 hover:bg-gray-800/50 focus:bg-gray-800/50 focus:text-gray-100 transition-colors duration-200">
+                    <DropdownMenuItem
+                    onClick={()=>navigate("/profile")}
+                     className="cursor-pointer text-gray-300 hover:text-gray-100 hover:bg-gray-800/50 focus:bg-gray-800/50 focus:text-gray-100 transition-colors duration-200">
                       <User className="mr-3 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer text-gray-300 hover:text-gray-100 hover:bg-gray-800/50 focus:bg-gray-800/50 focus:text-gray-100 transition-colors duration-200">
-                      <Settings className="mr-3 h-4 w-4" />
-                      <span>Settings</span>
-                    </DropdownMenuItem>
+                   
                     <DropdownMenuSeparator className="bg-gray-700/50" />
                     <DropdownMenuItem 
                       onClick={handleLogout} 

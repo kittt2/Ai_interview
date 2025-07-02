@@ -327,7 +327,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
             <button
               onClick={handleCallButtonClick}
               disabled={!userid || callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback}
-              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ${
+              className={`cursor-pointer w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ${
                 callStatus === CallStatus.CONNECTED
                   ? 'bg-red-500 hover:bg-red-600'
                   : callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback
@@ -336,7 +336,7 @@ export default function Agent({ userid, username, type, interviewid, questions, 
               } ${!userid ? 'bg-gray-500 cursor-not-allowed' : ''}`}
             >
               {callStatus === CallStatus.CONNECTING || isGeneratingFeedback || isFetchingFeedback ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin " />
               ) : callStatus === CallStatus.CONNECTED ? (
                 <PhoneOff className="w-6 h-6 text-white" />
               ) : (
@@ -366,10 +366,10 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         <button
           onClick={handleViewFeedback}
           disabled={isFetchingFeedback}
-          className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg shadow-md transition-colors flex items-center gap-2"
+          className="cursor-pointer mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white rounded-lg shadow-md transition-colors flex items-center gap-2"
         >
           {isFetchingFeedback && (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="cursor-pointer w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           )}
           View Feedback
         </button>

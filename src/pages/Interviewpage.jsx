@@ -270,7 +270,7 @@ export default function InterviewDetail() {
         </div>
 
         {/* Call Controls Section */}
-        <div className="flex justify-center items-center">
+        <div className=" flex justify-center items-center">
           <Agent 
             username={username} 
             userid={user?.id || interview.userid}

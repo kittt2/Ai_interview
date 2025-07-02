@@ -8,6 +8,7 @@ import { Briefcase, Sparkles, Plus,Award,Brain,Target,Shield,Zap,TrendingUp } fr
 import InterviewCard from "../pages/Interviewcard";
 import Homepage from "./Hero";
 
+
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,10 +83,10 @@ export default function Home() {
 
  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-900 text-white">
       
       <Homepage/>
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-6 pt-14">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
             Welcome back, {user?.displayName || "Developer"}! 👋
@@ -111,8 +112,8 @@ export default function Home() {
                   </h2>
                   <p className="text-slate-400">Manage and track your interview preparations</p>
                 </div>
-                <Link to="/create-interview">
-                  <Button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
+                <Link to="/interview">
+                  <Button  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
                     <Plus className="w-5 h-5 mr-2" />
                     Create New Interview
                   </Button>
@@ -139,7 +140,7 @@ export default function Home() {
                   <p className="text-slate-400 mb-8 max-w-md mx-auto">
                     Create your first interview session and begin practicing with AI-powered feedback
                   </p>
-                  <Link to="/create-interview">
+                  <Link to="/interview">
                     <Button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl">
                       <Plus className="w-5 h-5 mr-2" />
                       Create Your First Interview
@@ -159,7 +160,7 @@ export default function Home() {
               </div>
 
               {allInterviews.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div  className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {allInterviews.map((interview) => (
                     <InterviewCard
                       key={interview.id}
@@ -176,7 +177,7 @@ export default function Home() {
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-white">Be a pioneer!</h3>
                   <p className="text-slate-400 max-w-md mx-auto">
-                    No interviews available yet. Create the first one and help build the community!
+                    No interviews available yet. Create the account or login.
                   </p>
                 </div>
               )}
@@ -186,7 +187,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text text-transparent">
-              Why Choose IntelliHire?
+              Why Choose MockAI?
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Our AI-powered platform provides everything you need to ace your interviews
