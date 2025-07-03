@@ -221,7 +221,7 @@ export default function RegisterForm() {
 
               <Button 
                 type="submit" 
-                className="w-full h-11 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 transform hover:scale-105"
+                className="w-full h-11 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl  shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 transform cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -249,7 +249,7 @@ export default function RegisterForm() {
               variant="outline"
               onClick={onGoogleRegister}
               disabled={googleLoading}
-              className="w-full h-11 bg-gray-800/50 border-gray-700/50 text-white hover:bg-gray-700/50 hover:border-violet-500/50 rounded-xl transition-all duration-300"
+              className="w-full h-11 bg-gray-800/50 border-gray-700/50 text-white hover:bg-gray-700/50 hover:border-gray-200/50 hover:text-white rounded-xl transition-all duration-300 cursor-pointer"
             >
               {googleLoading ? (
                 <>

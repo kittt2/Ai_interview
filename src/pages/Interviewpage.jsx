@@ -125,7 +125,7 @@ export default function InterviewDetail() {
               </div>
               <div>
                 <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                  {interview.role} Interview
+                  {interview.role[0]?.toUpperCase()+interview.role?.slice(1)} Interview
                 </h1>
                 <p className="text-gray-400 text-lg mt-1">
                   Candidate: {username}

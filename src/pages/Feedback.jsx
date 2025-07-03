@@ -149,7 +149,7 @@ const ModernFeedback = ({ interview: propInterview, feedback: propFeedback }) =>
               <CardTitle className="text-slate-100">Final Assessment</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{feedback.finalAssessment}</p>
+              <p className="text-sm lg:text-[1rem] text-slate-300 leading-relaxed whitespace-pre-line">{feedback.finalAssessment}</p>
             </CardContent>
           </Card>
         )}
@@ -175,7 +175,7 @@ const ModernFeedback = ({ interview: propInterview, feedback: propFeedback }) =>
                         ></div>
                       </div>
                     </div>
-                    <p className="text-xs mt-2 text-slate-300 whitespace-pre-line">{cat.comment}</p>
+                    <p className="text-xs lg:text-[0.90rem] mt-2 text-slate-300 whitespace-pre-line">{cat.comment}</p>
                   </CardContent>
                 </Card>
               ))}

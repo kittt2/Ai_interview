@@ -180,7 +180,7 @@ export default function LoginForm() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium  shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 transform cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -208,7 +208,7 @@ export default function LoginForm() {
               variant="outline"
               onClick={onGoogleLogin}
               disabled={googleLoading}
-              className="w-full bg-slate-800 border-slate-700 text-white hover:bg-slate-700 hover:text-white hover:border-green-500/50 transition-all duration-300"
+              className="w-full bg-slate-800 border-slate-700 text-white hover:bg-slate-700 hover:text-white hover:border-gray-100/50 transition-all duration-300 cursor-pointer"
             >
               {googleLoading ? (
                 <>
@@ -227,7 +227,7 @@ export default function LoginForm() {
               Don't have an account?{" "}
               <Link 
                 to="/register" 
-                className="text-green-400 hover:text-green-300 transition-colors font-medium"
+                className="text-green-400 hover:text-green-700 transition-colors font-medium"
               >
                 Sign up
               </Link>
