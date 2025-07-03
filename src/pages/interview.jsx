@@ -40,7 +40,6 @@ export default function Interview() {
     return () => unsubscribe();
   }, []);
 
-  // AI speaking animation only when call is connected
   useEffect(() => {
     let interval;
     
@@ -57,7 +56,6 @@ export default function Interview() {
     };
   }, [callStatus]);
 
-  // Handle call status changes from Agent component
   const handleCallStatusChange = (status) => {
     setCallStatus(status);
   };

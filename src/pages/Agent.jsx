@@ -109,7 +109,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
           transcript: messages
         };
 
-        console.log('Making request to:', `${API_BASE}/api/feedback`);
         
         const response = await fetch(`${API_BASE}/api/feedback`, {
           method: "POST",
@@ -122,7 +121,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
           credentials: 'omit'
         });
 
-        console.log('Response status:', response.status);
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -131,7 +129,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
         }
 
         const data = await response.json();
-        console.log('Feedback API response:', data);
 
         if (data.success) {
           setFeedbackGenerated(true);
@@ -213,7 +210,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
       setIsFetchingFeedback(true);
       setErrorMessage("");
 
-      console.log('Fetching feedback for:', { userId: userid, interviewId: interviewid });
 
       const response = await fetch(
         `${API_BASE}/api/getfeedback?userId=${encodeURIComponent(userid)}&interviewId=${encodeURIComponent(interviewid)}`,
@@ -233,7 +229,6 @@ export default function Agent({ userid, username, type, interviewid, questions, 
       }
 
       const data = await response.json();
-      console.log('Feedback fetched successfully:', data);
 
       if (data.success && data.feedback) {
         navigate(`/interview/${interviewid}/feedback`, { 

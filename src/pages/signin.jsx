@@ -37,11 +37,9 @@ export default function LoginForm() {
         data.email,
         data.password
       );
-      console.log("User logged in:", userCredential.user);
       navigate("/");
     } catch (error) {
       console.error("Login error:", error.message);
-      // Better error messages
       if (error.code === "auth/user-not-found") {
         setError("No account found with this email address.");
       } else if (error.code === "auth/wrong-password") {
@@ -63,20 +61,15 @@ export default function LoginForm() {
     setError("");
     const provider = new GoogleAuthProvider();
     
-    // Add additional scopes if needed
     provider.addScope('profile');
     provider.addScope('email');
     
-    // Configure for production
     provider.setCustomParameters({
       prompt: 'select_account',
-      // Add your domain hint if needed
-      // hd: 'yourdomain.com'
     });
 
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("Google login successful:", result.user);
       navigate("/");
     } catch (error) {
       console.error("Google login error:", error.message);

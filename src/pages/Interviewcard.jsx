@@ -1,4 +1,3 @@
-// components/InterviewCard.jsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Code, Briefcase, CheckCircle2, Clock } from "lucide-react";
@@ -56,7 +55,6 @@ export default function InterviewCard({ interview, showCreator = false, creatorN
       </CardHeader>
 
       <CardContent className="pt-0 space-y-4">
-        {/* Tech Stack */}
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-lg bg-slate-800/50 border border-slate-700/50">
             <Code className="h-4 w-4 text-blue-400" />
@@ -77,7 +75,6 @@ export default function InterviewCard({ interview, showCreator = false, creatorN
           </div>
         </div>
 
-        {/* Questions and Date Info */}
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-slate-800/50 border border-slate-700/50">
@@ -100,7 +97,6 @@ export default function InterviewCard({ interview, showCreator = false, creatorN
           </div>
         </div>
 
-        {/* Creator Info */}
         {showCreator && (
           <div className="mt-4 pt-4 border-t border-slate-700/50">
             <div className="flex items-center gap-3">

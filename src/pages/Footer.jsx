@@ -16,10 +16,8 @@ export default function Footer() {
   return (
     <footer className="bg-gray-950 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
         <div className="py-12 text-center">
           
-          {/* Brand Section */}
           <div className="mb-8">
             <Link to="/" className="inline-flex items-center space-x-2 mb-4">
               <Crown className="h-8 w-8 text-violet-400" />
@@ -31,7 +29,6 @@ export default function Footer() {
               Empowering your journey with cutting-edge solutions.
             </p>
             
-            {/* Social Links */}
             <div className="flex justify-center space-x-3 mb-6">
               <Button variant="ghost" size="icon" className="text-gray-400 hover:text-violet-400">
                 <Github className="h-4 w-4" />
@@ -44,7 +41,6 @@ export default function Footer() {
               </Button>
             </div>
 
-            {/* Contact Info */}
             <div className="flex justify-center space-x-6 text-sm">
               <a href="mailto:hello@myapp.com" className="flex items-center space-x-2 text-gray-400 hover:text-violet-400">
                 <Mail className="h-4 w-4" />
@@ -58,7 +54,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="border-t border-gray-800 py-6 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 text-gray-400 text-sm mb-4 md:mb-0">
             <span>© {currentYear} MockAI. Made with</span>

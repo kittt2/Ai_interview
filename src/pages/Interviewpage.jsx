@@ -142,7 +142,6 @@ export default function InterviewDetail() {
             </Button>
           </div>
 
-          {/* Interview Details - Moved to Header */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
             <div className="flex items-center space-x-3 bg-gray-800/30 rounded-lg px-4 py-3">
               <Hash className="w-5 h-5 text-blue-400" />
