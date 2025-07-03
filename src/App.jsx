@@ -13,6 +13,7 @@ import InterviewDetail from "./pages/Interviewpage";
 import Feedback from "./pages/Feedback";
 import ProfilePage from "./pages/Profile";
 import { Toaster } from "sonner";// ✅ Add this import
+import ErrorNotFound from "./pages/NotFound";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -29,6 +30,7 @@ function App() {
             <Route path="/interview/:id/feedback" element={<Feedback />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/register" element={<RegisterForm />} />
+           <Route path="*" element={<ErrorNotFound />} />
           </Route>
         </Routes>
       </Router>
